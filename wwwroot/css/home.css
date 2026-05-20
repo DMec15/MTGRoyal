@@ -989,3 +989,27 @@ html, body {
     color:#a0a0a0;
     margin-bottom:5px;
 }
+
+/* Resultados de búsqueda */
+
+.search-results{
+    position:absolute;
+    width:100%;
+    background:#111827;
+    border-radius:15px;
+    margin-top:10px;
+    overflow:hidden;
+    z-index:999;
+}
+
+.search-item{
+    padding:15px;
+    cursor:pointer;
+    color:white;
+    transition:.3s;
+}
+
+.search-item:hover{
+    background:#1f2937;
+    color:#ffd700;
+}

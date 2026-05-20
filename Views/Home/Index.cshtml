@@ -8,13 +8,14 @@
             MTG ROYAL
         </h1>
 
-        <div class="buscador-container">
+        <div class="search-section">
 
             <input
                 type="text"
-                id="searchInput"
+                id="homeSearch"
                 class="buscador"
                 placeholder="Buscar cartas..."
+                oninput="searchCards(this.value)"
             />
 
             <div id="searchResults" class="search-results">

@@ -405,3 +405,134 @@ function updateBudget(){
     }
 
 }
+
+/* ====================================================
+   BASE DE DATOS CARTAS
+==================================================== */
+
+const mtgCards = [
+
+    {
+        id:"gishath",
+        name:"Gishath, Sun's Avatar",
+        image:"/imagenes/GishathSunsAvatar__94123.jpg",
+        price:"$11.99",
+        rarity:"Mítica",
+        type:"Legendary Creature",
+        set:"Ixalan"
+    },
+
+    {
+        id:"ureni",
+        name:"Ureni of the Unwritten",
+        image:"/imagenes/UreniOfTheUnwritten009__88381.jpg",
+        price:"$17.99",
+        rarity:"Mítica",
+        type:"Legendary Creature",
+        set:"Tarkir"
+    }
+
+];
+
+
+/* ====================================================
+   SEARCH AUTOCOMPLETE
+==================================================== */
+
+function searchCards(text){
+
+    const results =
+        document.getElementById("searchResults");
+
+    if(!results)
+        return;
+
+    results.innerHTML = "";
+
+    if(text.trim() === "")
+        return;
+
+    const filtered =
+        mtgCards.filter(card =>
+            card.name
+                .toLowerCase()
+                .includes(text.toLowerCase())
+        );
+
+    filtered.forEach(card => {
+
+        results.innerHTML += `
+
+            <div
+                class="search-item"
+                onclick="goToCard('${card.id}')">
+
+                ${card.name}
+
+            </div>
+
+        `;
+
+    });
+
+    /* SI ESCRIBIÓ EL NOMBRE EXACTO */
+
+    const exact =
+        mtgCards.find(card =>
+            card.name.toLowerCase() ===
+            text.toLowerCase()
+        );
+
+    if(exact){
+
+        goToCard(exact.id);
+
+    }
+
+}
+
+
+/* ====================================================
+   REDIRECCIÓN
+==================================================== */
+
+function goToCard(id){
+
+    window.location.href =
+        `/Cartas/Detalle/${id}`;
+
+}
+
+
+/* ====================================================
+   CARGAR DETALLE
+==================================================== */
+
+if(typeof cardId !== "undefined"){
+
+    const card =
+        mtgCards.find(c => c.id === cardId);
+
+    if(card){
+
+        document.getElementById("detailName")
+            .innerText = card.name;
+
+        document.getElementById("detailImage")
+            .src = card.image;
+
+        document.getElementById("detailPrice")
+            .innerText = card.price;
+
+        document.getElementById("detailRarity")
+            .innerText = card.rarity;
+
+        document.getElementById("detailType")
+            .innerText = card.type;
+
+        document.getElementById("detailSet")
+            .innerText = card.set;
+
+    }
+
+}
