@@ -41,6 +41,14 @@
                 Presupuesto
             </a>
 
+            <a class="nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Personal" ? "active" : "")"
+                asp-controller="Personal"
+                asp-action="Index">
+
+                Personal
+
+            </a>
+
         </div>
 
     </nav>
