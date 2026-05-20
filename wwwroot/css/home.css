@@ -143,15 +143,35 @@ html, body {
     margin-bottom: 30px;
 }
 
+.search-wrapper{
+    position:relative;
+    width:100%;
+}
+
+.search-icon{
+    position:absolute;
+    left:18px;
+    top:40%;
+    transform:translateY(-50%);
+    color:#ffd700;
+    font-size:1rem;
+}
+
 .catalog-search{
-    width: 100%;
-    padding: 18px;
-    border-radius: 15px;
-    border: 2px solid #ffd700;
+    width:100%;
+    padding:18px 18px 18px 50px;
+    border-radius:15px;
+    border:2px solid #ffd700;
     background: rgba(0,0,0,0.4);
     color: white;
-    font-size: 1rem;
+    font-size:1rem;
     margin-bottom: 20px;
+    transition:.3s;
+}
+
+.catalog-search:focus{
+    outline:none;
+    box-shadow:0 0 15px rgba(255,215,0,.5);
 }
 
 .filters-section{
@@ -459,4 +479,92 @@ html, body {
     background:#11152c;
     color:white;
     font-size:.95rem;
+}
+
+/* Tiendas */
+
+.stores-container{
+    min-height:100vh;
+    background:#0a0e27;
+    padding:40px;
+}
+
+.stores-header{
+    background:#1a1f3a;
+    padding:30px;
+    border-radius:20px;
+    margin-bottom:30px;
+}
+
+.stores-title{
+    color:#ffd700;
+    font-size:3rem;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.stores-subtitle{
+    color:#a0a0a0;
+    margin-bottom:30px;
+}
+
+.store-card{
+    background:#1a1f3a;
+    padding:25px;
+    border-radius:20px;
+    margin-bottom:20px;
+    transition:.3s;
+}
+
+.store-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 24px rgba(255,215,0,.2);
+}
+
+.store-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:20px;
+}
+
+.store-name{
+    color:white;
+    font-size:1.8rem;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.store-tags{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.store-chip{
+    background:#2a3f5f;
+    color:#64b5f6;
+    padding:8px 14px;
+    border-radius:20px;
+    font-size:.8rem;
+    font-weight:600;
+}
+
+.distance-chip{
+    background:#4caf50;
+    color:white;
+    padding:10px 15px;
+    border-radius:20px;
+    font-weight:700;
+}
+
+.store-info{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.store-info p{
+    color:#c0c0c0;
+    font-size:1rem;
 }
