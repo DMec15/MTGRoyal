@@ -1,4 +1,7 @@
-﻿<div class="home-container">
+@model IEnumerable<MTGRoyal.Models.Carta>
+@using System.Text.Json
+
+<div class="home-container">
 
     <div class="overlay"></div>
 
@@ -15,7 +18,7 @@
                 id="homeSearch"
                 class="buscador"
                 placeholder="Buscar cartas..."
-                oninput="searchCards(this.value)"
+                oninput="searchCardsFromDatabase(this.value)"
             />
 
             <div id="searchResults" class="search-results">
@@ -31,3 +34,70 @@
     </div>
 
 </div>
+
+<script>
+    const databaseCards = @Html.Raw(JsonSerializer.Serialize(
+        (Model ?? Enumerable.Empty<MTGRoyal.Models.Carta>()).Select(carta => new
+        {
+            id = carta.Id,
+            name = carta.Nombre
+        })
+    ));
+
+    function searchCardsFromDatabase(text){
+
+        const results =
+            document.getElementById("searchResults");
+
+        if(!results)
+            return;
+
+        results.innerHTML = "";
+
+        if(text.trim() === "")
+            return;
+
+        const filtered =
+            databaseCards.filter(card =>
+                card.name
+                    .toLowerCase()
+                    .includes(text.toLowerCase())
+            );
+
+        filtered.forEach(card => {
+
+            results.innerHTML += `
+
+                <div
+                    class="search-item"
+                    onclick="goToDatabaseCard('${card.id}')">
+
+                    ${card.name}
+
+                </div>
+
+            `;
+
+        });
+
+        const exact =
+            databaseCards.find(card =>
+                card.name.toLowerCase() ===
+                text.toLowerCase()
+            );
+
+        if(exact){
+
+            goToDatabaseCard(exact.id);
+
+        }
+
+    }
+
+    function goToDatabaseCard(id){
+
+        window.location.href =
+            `/Cartas/Detalle/${id}`;
+
+    }
+</script>
