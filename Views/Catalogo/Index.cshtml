@@ -1,0 +1,240 @@
+<div class="catalog-container">
+
+    <div class="catalog-header">
+
+        <h1 class="catalog-title">
+            Catálogo de Cartas
+        </h1>
+
+        <p class="catalog-subtitle">
+            Explora nuestra colección completa
+        </p>
+
+        <div class="search-section">
+
+            <input
+                type="text"
+                id="catalogSearch"
+                class="catalog-search"
+                placeholder="Buscar cartas..."
+            />
+
+        </div>
+
+        <div class="filters-section">
+
+            <select class="filter-select" id="rarityFilter">
+                <option value="">Todas las rarezas</option>
+                <option value="Common">Common</option>
+                <option value="Rare">Rare</option>
+                <option value="Mythic">Mythic</option>
+            </select>
+
+            <select class="filter-select" id="typeFilter">
+                <option value="">Todos los tipos</option>
+                <option value="Creature">Creature</option>
+                <option value="Sorcery">Sorcery</option>
+                <option value="Instant">Instant</option>
+            </select>
+
+        </div>
+
+    </div>
+
+    <div class="cards-container">
+
+        <!-- CARTA 1 -->
+
+        <div class="mtg-card"
+             onclick="openModal(
+             'Gishath, Sun\'s Avatar',
+             '/imagenes/GishathSunsAvatar__94123.jpg',
+             '$11.99',
+             'Mítica',
+             'Legendary Creature',
+             'Ixalan'
+             )">
+
+            <img
+                src="/imagenes/GishathSunsAvatar__94123.jpg"
+                class="card-image"
+            />
+
+            <div class="card-content">
+
+                <h3 class="card-title">
+                    Gishath, Sun's Avatar
+                </h3>
+
+                <div class="card-price-section">
+
+                    <span class="card-price">
+                        $11.99
+                    </span>
+
+                </div>
+
+                <div class="card-tags">
+
+                    <span class="rarity mythic">
+                        Mítica
+                    </span>
+
+                    <span class="set-tag">
+                        Ixalan
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CARTA 2 -->
+
+        <div class="mtg-card"
+             onclick="openModal(
+             'Ureni of the Unwritten',
+             '/imagenes/UreniOfTheUnwritten009__88381.jpg',
+             '$17.99',
+             'Mítica',
+             'Legendary Creature',
+             'Tarkir'
+             )">
+
+            <img
+                src="/imagenes/UreniOfTheUnwritten009__88381.jpg"
+                class="card-image"
+            />
+
+            <div class="card-content">
+
+                <h3 class="card-title">
+                    Ureni of the Unwritten
+                </h3>
+
+                <div class="card-price-section">
+
+                    <span class="card-price">
+                        $17.99
+                    </span>
+
+                </div>
+
+                <div class="card-tags">
+
+                    <span class="rarity mythic">
+                        Mítica
+                    </span>
+
+                    <span class="set-tag">
+                        Tarkir
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL ÚNICO -->
+
+    <div id="cardModal" class="modal-overlay">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="modalCardName">
+                    Nombre Carta
+                </h2>
+
+                <button class="close-btn" onclick="closeModal()">
+                    ✕
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="modal-image-section">
+
+                    <img
+                        id="modalCardImage"
+                        src=""
+                        class="modal-card-image"
+                    />
+
+                </div>
+
+                <div class="modal-info">
+
+                    <div class="price-section">
+
+                        <span class="price-label">
+                            Precio actual
+                        </span>
+
+                        <div class="price-row">
+
+                            <span id="modalCardPrice" class="modal-price">
+                                $0.00
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="info-group">
+
+                        <span class="info-label">
+                            Rareza
+                        </span>
+
+                        <span id="modalRarity" class="rarity mythic">
+                            Mítica
+                        </span>
+
+                    </div>
+
+                    <div class="info-group">
+
+                        <span class="info-label">
+                            Tipo
+                        </span>
+
+                        <span id="modalType">
+                            Legendary Creature
+                        </span>
+
+                    </div>
+
+                    <div class="info-group">
+
+                        <span class="info-label">
+                            Colección
+                        </span>
+
+                        <span id="modalSet">
+                            Ixalan
+                        </span>
+
+                    </div>
+
+                    <div class="info-note">
+
+                        Nota: Los precios pueden variar en función de la disponibilidad y el estado del mercado.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
