@@ -1,14 +1,52 @@
-@Model IEnumerable<MTGRoyal.Models.Carta>
+@model IEnumerable<MTGRoyal.Models.Carta>
+@using System.Globalization
+
+@functions {
+    private static string GetColorCode(string? color)
+    {
+        var normalized = (color ?? string.Empty).Trim().ToLowerInvariant();
+
+        return normalized switch
+        {
+            "w" or "white" or "blanco" => "W",
+            "u" or "blue" or "azul" => "U",
+            "b" or "black" or "negro" => "B",
+            "r" or "red" or "rojo" => "R",
+            "g" or "green" or "verde" => "G",
+            _ => color ?? string.Empty
+        };
+    }
+
+    private static string GetRarityClass(string? rarity)
+    {
+        var normalized = (rarity ?? string.Empty).Trim().ToLowerInvariant();
+
+        if (normalized.Contains("mit"))
+            return "mythic";
+
+        if (normalized.Contains("rara"))
+            return "rare";
+
+        if (normalized.Contains("infrecuente"))
+            return "uncommon";
+
+        if (normalized.Contains("com"))
+            return "common";
+
+        return string.Empty;
+    }
+}
+
 <div class="catalog-container">
 
     <div class="catalog-header">
 
         <h1 class="catalog-title">
-            Catálogo de Cartas
+            Catalogo de Cartas
         </h1>
 
         <p class="catalog-subtitle">
-            Explora nuestra colección completa
+            Explora nuestra coleccion completa
         </p>
 
         <div class="search-section">
@@ -63,8 +101,8 @@
                     Todas las rarezas
                 </option>
 
-                <option value="Común">
-                    Común
+                <option value="Comun">
+                    Comun
                 </option>
 
                 <option value="Infrecuente">
@@ -75,8 +113,8 @@
                     Rara
                 </option>
 
-                <option value="Mítica">
-                    Mítica
+                <option value="Mitica">
+                    Mitica
                 </option>
 
             </select>
@@ -93,8 +131,8 @@
                     Criatura
                 </option>
 
-                <option value="Instantáneo">
-                    Instantáneo
+                <option value="Instantaneo">
+                    Instantaneo
                 </option>
 
                 <option value="Conjuro">
@@ -127,107 +165,63 @@
 
     <div class="cards-container">
 
-        <!-- CARTA 1 -->
+        @foreach (var carta in Model ?? Enumerable.Empty<MTGRoyal.Models.Carta>())
+        {
+            var imageUrl = carta.ImagenUrl ?? string.Empty;
+            var price = carta.Precio.ToString("C", CultureInfo.GetCultureInfo("en-US"));
+            var colors = string.Join(",", carta.Colors.Select(color => GetColorCode(color.Nombre)));
+            var rarityClass = GetRarityClass(carta.Rareza);
+            var collection = carta.Coleccion ?? "Catalogo";
 
-        <div class="mtg-card"
-             data-name="Gishath"
-             data-rarity="Mítica"
-             data-type="Criatura"
-             data-colors="R,G,W"
-             onclick="openModal(
-             'Gishath, Sun\'s Avatar',
-             '/imagenes/GishathSunsAvatar__94123.jpg',
-             '$11.99',
-             'Mítica',
-             'Legendary Creature',
-             'Ixalan'
-             )">
+            <div class="mtg-card"
+                 data-name="@carta.Nombre"
+                 data-rarity="@carta.Rareza"
+                 data-type="@carta.Tipo"
+                 data-colors="@colors"
+                 data-modal-name="@carta.Nombre"
+                 data-modal-image="@imageUrl"
+                 data-modal-price="@price"
+                 data-modal-rarity="@carta.Rareza"
+                 data-modal-rarity-class="@rarityClass"
+                 data-modal-type="@carta.Tipo"
+                 data-modal-set="@collection"
+                 onclick="openModalFromCard(this)">
 
-            <img
-                src="/imagenes/GishathSunsAvatar__94123.jpg"
-                class="card-image"
-            />
+                <img
+                    src="@imageUrl"
+                    class="card-image"
+                />
 
-            <div class="card-content">
+                <div class="card-content">
 
-                <h3 class="card-title">
-                    Gishath, Sun's Avatar
-                </h3>
+                    <h3 class="card-title">
+                        @carta.Nombre
+                    </h3>
 
-                <div class="card-price-section">
+                    <div class="card-price-section">
 
-                    <span class="card-price">
-                        $11.99
-                    </span>
+                        <span class="card-price">
+                            @price
+                        </span>
 
-                </div>
+                    </div>
 
-                <div class="card-tags">
+                    <div class="card-tags">
 
-                    <span class="rarity mythic">
-                        Mítica
-                    </span>
+                        <span class="rarity @rarityClass">
+                            @carta.Rareza
+                        </span>
 
-                    <span class="set-tag">
-                        Ixalan
-                    </span>
+                        <span class="set-tag">
+                            @collection
+                        </span>
 
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- CARTA 2 -->
-
-        <div class="mtg-card"
-             data-name="Ureni"
-             data-rarity="Mítica"
-             data-type="Criatura"
-             data-colors="U,R,G"
-             onclick="openModal(
-             'Ureni of the Unwritten',
-             '/imagenes/UreniOfTheUnwritten009__88381.jpg',
-             '$17.99',
-             'Mítica',
-             'Legendary Creature',
-             'Tarkir'
-             )">
-
-            <img
-                src="/imagenes/UreniOfTheUnwritten009__88381.jpg"
-                class="card-image"
-            />
-
-            <div class="card-content">
-
-                <h3 class="card-title">
-                    Ureni of the Unwritten
-                </h3>
-
-                <div class="card-price-section">
-
-                    <span class="card-price">
-                        $17.99
-                    </span>
-
-                </div>
-
-                <div class="card-tags">
-
-                    <span class="rarity mythic">
-                        Mítica
-                    </span>
-
-                    <span class="set-tag">
-                        Tarkir
-                    </span>
+                    </div>
 
                 </div>
 
             </div>
-
-        </div>
+        }
 
     </div>
 
@@ -244,7 +238,7 @@
                 </h2>
 
                 <button class="close-btn" onclick="closeModal()">
-                    ✕
+                    x
                 </button>
 
             </div>
@@ -286,7 +280,7 @@
                         </span>
 
                         <span id="modalRarity" class="rarity mythic">
-                            Mítica
+                            Mitica
                         </span>
 
                     </div>
@@ -298,7 +292,7 @@
                         </span>
 
                         <span id="modalType">
-                            Legendary Creature
+                            Tipo
                         </span>
 
                     </div>
@@ -306,18 +300,18 @@
                     <div class="info-group">
 
                         <span class="info-label">
-                            Colección
+                            Coleccion
                         </span>
 
                         <span id="modalSet">
-                            Ixalan
+                            Catalogo
                         </span>
 
                     </div>
 
                     <div class="info-note">
 
-                        Nota: Los precios pueden variar en función de la disponibilidad y el estado del mercado.
+                        Nota: Los precios pueden variar en funcion de la disponibilidad y el estado del mercado.
 
                     </div>
 
@@ -330,3 +324,27 @@
     </div>
 
 </div>
+
+<script>
+    function openModalFromCard(card){
+
+        openModal(
+            card.dataset.modalName,
+            card.dataset.modalImage,
+            card.dataset.modalPrice,
+            card.dataset.modalRarity,
+            card.dataset.modalType,
+            card.dataset.modalSet
+        );
+
+        const modalRarity = document.getElementById("modalRarity");
+
+        if(modalRarity){
+
+            modalRarity.className =
+                `rarity ${card.dataset.modalRarityClass || ""}`;
+
+        }
+
+    }
+</script>

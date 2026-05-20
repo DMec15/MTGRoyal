@@ -17,5 +17,7 @@ public partial class Carta
 
     public decimal Precio { get; set; }
 
+    public string? Coleccion { get; set; }
+
     public virtual ICollection<Colore> Colors { get; set; } = new List<Colore>();
 }

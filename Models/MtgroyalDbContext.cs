@@ -29,6 +29,7 @@ public partial class MtgroyalDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Cartas__3214EC079FB39A6A");
 
+            entity.Property(e => e.Coleccion).HasMaxLength(100);
             entity.Property(e => e.ImagenUrl).HasColumnName("ImagenURL");
             entity.Property(e => e.Nombre).HasMaxLength(150);
             entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
