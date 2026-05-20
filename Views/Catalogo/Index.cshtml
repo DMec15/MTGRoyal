@@ -23,29 +23,115 @@
 
         <div class="filters-section">
 
+            <!-- FILTRO COLORES -->
+
+            <div class="colors-filter">
+
+                <span class="filter-label">
+                    Colores:
+                </span>
+
+                <button class="color-chip white-chip" data-color="W">
+                    Blanco
+                </button>
+
+                <button class="color-chip blue-chip" data-color="U">
+                    Azul
+                </button>
+
+                <button class="color-chip black-chip" data-color="B">
+                    Negro
+                </button>
+
+                <button class="color-chip red-chip" data-color="R">
+                    Rojo
+                </button>
+
+                <button class="color-chip green-chip" data-color="G">
+                    Verde
+                </button>
+
+            </div>
+
+            <!-- FILTRO RAREZA -->
+
             <select class="filter-select" id="rarityFilter">
-                <option value="">Todas las rarezas</option>
-                <option value="Common">Common</option>
-                <option value="Rare">Rare</option>
-                <option value="Mythic">Mythic</option>
+
+                <option value="">
+                    Todas las rarezas
+                </option>
+
+                <option value="Común">
+                    Común
+                </option>
+
+                <option value="Infrecuente">
+                    Infrecuente
+                </option>
+
+                <option value="Rara">
+                    Rara
+                </option>
+
+                <option value="Mítica">
+                    Mítica
+                </option>
+
             </select>
 
+            <!-- FILTRO TIPO -->
+
             <select class="filter-select" id="typeFilter">
-                <option value="">Todos los tipos</option>
-                <option value="Creature">Creature</option>
-                <option value="Sorcery">Sorcery</option>
-                <option value="Instant">Instant</option>
+
+                <option value="">
+                    Todos los tipos
+                </option>
+
+                <option value="Criatura">
+                    Criatura
+                </option>
+
+                <option value="Instantáneo">
+                    Instantáneo
+                </option>
+
+                <option value="Conjuro">
+                    Conjuro
+                </option>
+
+                <option value="Encantamiento">
+                    Encantamiento
+                </option>
+
+                <option value="Artefacto">
+                    Artefacto
+                </option>
+
+                <option value="Planeswalker">
+                    Planeswalker
+                </option>
+
+                <option value="Tierra">
+                    Tierra
+                </option>
+
             </select>
 
         </div>
 
     </div>
 
+    <!-- CONTENEDOR CARTAS -->
+
     <div class="cards-container">
 
         <!-- CARTA 1 -->
 
         <div class="mtg-card"
+             data-name="Gishath"
+             data-rarity="Mítica"
+             data-type="Criatura"
+             data-colors="R,G,W"
              onclick="openModal(
              'Gishath, Sun\'s Avatar',
              '/imagenes/GishathSunsAvatar__94123.jpg',
@@ -93,6 +179,10 @@
         <!-- CARTA 2 -->
 
         <div class="mtg-card"
+             data-name="Ureni"
+             data-rarity="Mítica"
+             data-type="Criatura"
+             data-colors="U,R,G"
              onclick="openModal(
              'Ureni of the Unwritten',
              '/imagenes/UreniOfTheUnwritten009__88381.jpg',
@@ -139,7 +229,7 @@
 
     </div>
 
-    <!-- MODAL ÚNICO -->
+    <!-- MODAL -->
 
     <div id="cardModal" class="modal-overlay">
 

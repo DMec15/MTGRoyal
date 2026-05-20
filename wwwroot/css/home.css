@@ -385,3 +385,78 @@ html, body {
     margin-top:30px;
     color:#a0a0a0;
 }
+
+/* Filtros */
+
+.filters-section{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+
+.colors-filter{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.filter-label{
+    color:#a0a0a0;
+    font-size:.9rem;
+    font-weight:600;
+}
+
+.color-chip{
+    border:none;
+    padding:10px 15px;
+    border-radius:20px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.3s;
+}
+
+.color-chip:hover{
+    transform:translateY(-2px);
+}
+
+.color-chip.active{
+    outline:2px solid #ffd700;
+    box-shadow:0 0 12px rgba(255,215,0,.5);
+}
+
+.white-chip{
+    background:#F0E68C;
+    color:black;
+}
+
+.blue-chip{
+    background:#0E68AB;
+    color:white;
+}
+
+.black-chip{
+    background:#150B00;
+    color:white;
+}
+
+.red-chip{
+    background:#D3202A;
+    color:white;
+}
+
+.green-chip{
+    background:#00733E;
+    color:white;
+}
+
+.filter-select{
+    min-width:180px;
+    padding:12px;
+    border-radius:10px;
+    border:2px solid #ffd700;
+    background:#11152c;
+    color:white;
+    font-size:.95rem;
+}
