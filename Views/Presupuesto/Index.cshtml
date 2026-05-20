@@ -1,0 +1,186 @@
+<div class="budget-container">
+
+    <div class="budget-header">
+
+        <div class="budget-top">
+
+            <div class="wallet-icon">
+                💰
+            </div>
+
+            <div>
+
+                <h1 class="budget-title">
+                    Planificador de Presupuesto
+                </h1>
+
+                <p class="budget-subtitle">
+                    Construye tu mazo dentro de tu presupuesto
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="budget-input-section">
+
+            <input
+                type="number"
+                id="budgetInput"
+                class="budget-input"
+                placeholder="Ingresa tu presupuesto"
+                oninput="updateBudget()"
+            />
+
+        </div>
+
+        <div class="budget-progress-section">
+
+            <div class="budget-values">
+
+                <span id="spentText">
+                    Gastado: $0.00
+                </span>
+
+                <span id="remainingText">
+                    Restante: $0.00
+                </span>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div
+                    class="progress-fill"
+                    id="progressFill">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="budget-content">
+
+        <div class="budget-cards-section">
+
+            <h2 class="section-title">
+                Cartas Disponibles
+            </h2>
+
+            <div class="budget-cards-grid">
+
+                <div class="budget-card">
+
+                    <img
+                        src="/imagenes/GishathSunsAvatar__94123.jpg"
+                        class="budget-card-image"
+                    />
+
+                    <div class="budget-card-content">
+
+                        <h3 class="budget-card-title">
+                            Gishath, Sun's Avatar
+                        </h3>
+
+                        <div class="budget-card-bottom">
+
+                            <span class="budget-card-price">
+                                $11.99
+                            </span>
+
+                            <span class="budget-rarity">
+                                Mítica
+                            </span>
+
+                        </div>
+
+                        <button
+                            class="add-btn"
+                            onclick="addToCart(
+                            'Gishath, Sun\'s Avatar',
+                            11.99
+                            )">
+
+                            + Agregar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="budget-card">
+
+                    <img
+                        src="/imagenes/UreniOfTheUnwritten009__88381.jpg"
+                        class="budget-card-image"
+                    />
+
+                    <div class="budget-card-content">
+
+                        <h3 class="budget-card-title">
+                            Ureni of the Unwritten
+                        </h3>
+
+                        <div class="budget-card-bottom">
+
+                            <span class="budget-card-price">
+                                $17.99
+                            </span>
+
+                            <span class="budget-rarity">
+                                Mítica
+                            </span>
+
+                        </div>
+
+                        <button
+                            class="add-btn"
+                            onclick="addToCart(
+                            'Ureni of the Unwritten',
+                            17.99
+                            )">
+
+                            + Agregar
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="cart-section">
+
+            <h2 class="section-title">
+                🛒 Mi Carrito
+            </h2>
+
+            <div id="cartItems">
+
+                <p class="empty-cart">
+                    Tu carrito está vacío
+                </p>
+
+            </div>
+
+            <div class="cart-total">
+
+                <span>Total:</span>
+
+                <span id="cartTotal">
+                    $0.00
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

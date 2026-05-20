@@ -1,0 +1,97 @@
+<div class="advisor-container">
+
+    <div class="advisor-header">
+
+        <div class="advisor-top">
+
+            <div class="advisor-avatar">
+                🤖
+            </div>
+
+            <div>
+
+                <h1 class="advisor-title">
+                    Asesor con IA
+                </h1>
+
+                <p class="advisor-subtitle">
+                    Tu experto personal en Magic: The Gathering
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="suggested-section">
+
+            <p class="suggested-label">
+                Preguntas sugeridas:
+            </p>
+
+            <div class="suggested-buttons">
+
+                <button class="suggested-btn"
+                        onclick="sendSuggestedQuestion(this)">
+                    ¿Qué mazo me recomiendas para Modern?
+                </button>
+
+                <button class="suggested-btn"
+                        onclick="sendSuggestedQuestion(this)">
+                    ¿Cuáles son las mejores cartas para Commander?
+                </button>
+
+                <button class="suggested-btn"
+                        onclick="sendSuggestedQuestion(this)">
+                    Ayúdame a mejorar mi mazo de Standard
+                </button>
+
+                <button class="suggested-btn"
+                        onclick="sendSuggestedQuestion(this)">
+                    ¿Qué cartas están subiendo de precio?
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="chat-container">
+
+        <div class="chat-messages" id="chatMessages">
+
+            <div class="message ai-message">
+
+                <div class="message-bubble">
+
+                    ¡Hola! Soy tu Asesor de Magic IA.
+                    Puedo ayudarte a construir mazos,
+                    analizar estrategias y recomendar cartas.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="chat-input-section">
+
+            <textarea
+                id="chatInput"
+                class="chat-input"
+                placeholder="Escribe tu pregunta..."
+            ></textarea>
+
+            <button
+                class="send-btn"
+                onclick="sendMessage()">
+
+                ➤
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
