@@ -16,6 +16,7 @@ namespace MTGRoyal.Controllers
         public async Task<IActionResult> Detalle(int id)
         {
             var carta = await _db.Cartas
+                .Include(c => c.Rareza)
                 .Include(c => c.Colors)
                 .FirstOrDefaultAsync(c => c.Id == id);
 

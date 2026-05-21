@@ -1,3 +1,11 @@
+@using MTGRoyal.Controllers
+@{
+    var form = ViewBag.Form as PersonalController.CartaCreateRequest;
+    var rarezas = ViewBag.Rarezas as IEnumerable<MTGRoyal.Models.Rareza> ?? Enumerable.Empty<MTGRoyal.Models.Rareza>();
+    var colores = ViewBag.Colores as IEnumerable<MTGRoyal.Models.Colore> ?? Enumerable.Empty<MTGRoyal.Models.Colore>();
+    var selectedColors = form?.ColorIds ?? [];
+}
+
 <div class="personal-container">
 
     <div class="personal-header">
@@ -20,60 +28,137 @@
                 Agregar Nueva Carta
             </h2>
 
-            <div class="form-grid">
+            @if (TempData["SuccessMessage"] is string successMessage)
+            {
+                <div class="personal-message success-message">
+                    @successMessage
+                </div>
+            }
 
-                <input
-                    type="text"
-                    class="personal-input"
-                    placeholder="Nombre de la carta"
-                />
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="personal-message error-message">
+                    Revisa los datos del formulario e intenta nuevamente.
+                </div>
+            }
 
-                <input
-                    type="text"
-                    class="personal-input"
-                    placeholder="Precio"
-                />
+            <form asp-controller="Personal" asp-action="Index" method="post">
 
-                <input
-                    type="text"
-                    class="personal-input"
-                    placeholder="Rareza"
-                />
+                @Html.AntiForgeryToken()
 
-                <input
-                    type="text"
-                    class="personal-input"
-                    placeholder="Tipo"
-                />
+                <div class="form-grid">
 
-                <input
-                    type="text"
-                    class="personal-input"
-                    placeholder="Colección"
-                />
+                    <input
+                        type="text"
+                        name="Nombre"
+                        class="personal-input"
+                        placeholder="Nombre de la carta"
+                        value="@form?.Nombre"
+                        required
+                    />
 
-                <input
-                    type="text"
-                    class="personal-input"
-                    placeholder="Ruta de imagen"
-                />
+                    <input
+                        type="number"
+                        name="Precio"
+                        class="personal-input"
+                        placeholder="Precio"
+                        value="@(form?.Precio.ToString(System.Globalization.CultureInfo.InvariantCulture))"
+                        min="0"
+                        step="0.01"
+                        required
+                    />
 
-            </div>
+                    <select
+                        name="RarezaId"
+                        class="personal-input"
+                        required>
 
-            <button class="save-btn">
-                Guardar Carta
-            </button>
+                        <option value="">
+                            Selecciona una rareza
+                        </option>
+
+                        @foreach (var rareza in rarezas)
+                        {
+                            <option value="@rareza.Id" selected="@(form?.RarezaId == rareza.Id)">
+                                @rareza.Nombre
+                            </option>
+                        }
+
+                    </select>
+
+                    <input
+                        type="text"
+                        name="Tipo"
+                        class="personal-input"
+                        placeholder="Tipo"
+                        value="@form?.Tipo"
+                        required
+                    />
+
+                    <input
+                        type="text"
+                        name="Coleccion"
+                        class="personal-input"
+                        placeholder="Coleccion"
+                        value="@form?.Coleccion"
+                    />
+
+                    <input
+                        type="text"
+                        name="ImagenUrl"
+                        class="personal-input"
+                        placeholder="Ruta de imagen"
+                        value="@form?.ImagenUrl"
+                    />
+
+                </div>
+
+                <div class="personal-color-section">
+
+                    <span class="personal-color-label">
+                        Colores
+                    </span>
+
+                    <div class="personal-color-options">
+
+                        @foreach (var color in colores)
+                        {
+                            <label class="personal-color-option">
+
+                                <input
+                                    type="checkbox"
+                                    name="ColorIds"
+                                    value="@color.Id"
+                                    checked="@selectedColors.Contains(color.Id)"
+                                />
+
+                                <span>
+                                    @color.Nombre
+                                </span>
+
+                            </label>
+                        }
+
+                    </div>
+
+                </div>
+
+                <button type="submit" class="save-btn">
+                    Guardar Carta
+                </button>
+
+            </form>
 
         </div>
 
         <div class="personal-card">
 
             <h2 class="section-title">
-                Administración
+                Administracion
             </h2>
 
             <p class="admin-text">
-                Aquí podrás editar, eliminar y administrar
+                Aqui podras editar, eliminar y administrar
                 todas las cartas registradas en la base de datos.
             </p>
 

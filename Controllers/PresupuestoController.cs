@@ -18,6 +18,7 @@ namespace MTGRoyal.Controllers
         {
 
             var cartas = await _db.Cartas
+                .Include(c => c.Rareza)
                 .Include(c => c.Colors)
                 .ToListAsync();
 

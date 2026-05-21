@@ -1135,6 +1135,57 @@ html, body {
     box-shadow:0 0 15px rgba(255,215,0,.4);
 }
 
+.personal-message{
+    margin-top:18px;
+    padding:14px 16px;
+    border-radius:12px;
+    color:white;
+    font-weight:600;
+}
+
+.success-message{
+    background:rgba(76,175,80,.18);
+    border:1px solid #4caf50;
+}
+
+.error-message{
+    background:rgba(244,67,54,.18);
+    border:1px solid #f44336;
+}
+
+.personal-color-section{
+    margin-top:22px;
+}
+
+.personal-color-label{
+    display:block;
+    color:white;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.personal-color-options{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.personal-color-option{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border:1px solid #ffd700;
+    border-radius:12px;
+    background:#0f1329;
+    color:white;
+    cursor:pointer;
+}
+
+.personal-color-option input{
+    accent-color:#ffd700;
+}
+
 .save-btn{
     margin-top:25px;
     padding:15px 25px;

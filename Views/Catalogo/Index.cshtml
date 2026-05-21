@@ -170,18 +170,19 @@
             var imageUrl = carta.ImagenUrl ?? string.Empty;
             var price = carta.Precio.ToString("C", CultureInfo.GetCultureInfo("en-US"));
             var colors = string.Join(",", carta.Colors.Select(color => GetColorCode(color.Nombre)));
-            var rarityClass = GetRarityClass(carta.Rareza);
+            var rarityName = carta.Rareza.Nombre;
+            var rarityClass = GetRarityClass(rarityName);
             var collection = carta.Coleccion ?? "Catalogo";
 
             <div class="mtg-card"
                  data-name="@carta.Nombre"
-                 data-rarity="@carta.Rareza"
+                 data-rarity="@rarityName"
                  data-type="@carta.Tipo"
                  data-colors="@colors"
                  data-modal-name="@carta.Nombre"
                  data-modal-image="@imageUrl"
                  data-modal-price="@price"
-                 data-modal-rarity="@carta.Rareza"
+                 data-modal-rarity="@rarityName"
                  data-modal-rarity-class="@rarityClass"
                  data-modal-type="@carta.Tipo"
                  data-modal-set="@collection"
@@ -209,7 +210,7 @@
                     <div class="card-tags">
 
                         <span class="rarity @rarityClass">
-                            @carta.Rareza
+                            @rarityName
                         </span>
 
                         <span class="set-tag">
