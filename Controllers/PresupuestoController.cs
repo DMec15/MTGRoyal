@@ -1,12 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MTGRoyal.Models;
 
 namespace MTGRoyal.Controllers
 {
     public class PresupuestoController : Controller
     {
-        public IActionResult Index()
+
+        private readonly MtgroyalDbContext _db;
+
+        public PresupuestoController(MtgroyalDbContext db)
         {
-            return View();
+            _db = db;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+
+            var cartas = await _db.Cartas
+                .Include(c => c.Colors)
+                .ToListAsync();
+
+            return View(cartas);
         }
     }
 }

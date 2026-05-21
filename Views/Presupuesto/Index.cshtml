@@ -1,3 +1,6 @@
+@model IEnumerable<MTGRoyal.Models.Carta>
+@using System.Globalization
+
 <div class="budget-container">
 
     <div class="budget-header">
@@ -65,91 +68,69 @@
 
         <div class="budget-cards-section">
 
-            <h2 class="section-title">
-                Cartas Disponibles
-            </h2>
+            <div class="budget-section-header">
+
+                <h2 class="section-title">
+                    Cartas Disponibles
+                </h2>
+
+                <input
+                    type="text"
+                    id="budgetCardSearch"
+                    class="budget-card-search"
+                    placeholder="Buscar carta..."
+                    oninput="filterBudgetCards(this.value)"
+                />
+
+            </div>
 
             <div class="budget-cards-grid">
 
-                <div class="budget-card">
+                @foreach (var carta in Model ?? Enumerable.Empty<MTGRoyal.Models.Carta>())
+                {
+                    var imageUrl = carta.ImagenUrl ?? string.Empty;
+                    var priceText = carta.Precio.ToString("C", CultureInfo.GetCultureInfo("en-US"));
+                    var priceValue = carta.Precio.ToString(CultureInfo.InvariantCulture);
 
-                    <img
-                        src="/imagenes/GishathSunsAvatar__94123.jpg"
-                        class="budget-card-image"
-                    />
+                    <div class="budget-card" data-card-name="@carta.Nombre">
 
-                    <div class="budget-card-content">
+                        <img
+                            src="@imageUrl"
+                            class="budget-card-image"
+                        />
 
-                        <h3 class="budget-card-title">
-                            Gishath, Sun's Avatar
-                        </h3>
+                        <div class="budget-card-content">
 
-                        <div class="budget-card-bottom">
+                            <h3 class="budget-card-title">
+                                @carta.Nombre
+                            </h3>
 
-                            <span class="budget-card-price">
-                                $11.99
-                            </span>
+                            <div class="budget-card-bottom">
 
-                            <span class="budget-rarity">
-                                Mítica
-                            </span>
+                                <span class="budget-card-price">
+                                    @priceText
+                                </span>
 
-                        </div>
+                                <span class="budget-rarity">
+                                    @carta.Rareza
+                                </span>
 
-                        <button
-                            class="add-btn"
-                            onclick="addToCart(
-                            'Gishath, Sun\'s Avatar',
-                            11.99
-                            )">
+                            </div>
 
-                            + Agregar
+                            <button
+                                class="add-btn"
+                                data-card-name="@carta.Nombre"
+                                data-card-price="@priceValue"
+                                onclick="addBudgetCardToCart(this)">
 
-                        </button>
+                                + Agregar
 
-                    </div>
-
-                </div>
-
-                <div class="budget-card">
-
-                    <img
-                        src="/imagenes/UreniOfTheUnwritten009__88381.jpg"
-                        class="budget-card-image"
-                    />
-
-                    <div class="budget-card-content">
-
-                        <h3 class="budget-card-title">
-                            Ureni of the Unwritten
-                        </h3>
-
-                        <div class="budget-card-bottom">
-
-                            <span class="budget-card-price">
-                                $17.99
-                            </span>
-
-                            <span class="budget-rarity">
-                                Mítica
-                            </span>
+                            </button>
 
                         </div>
 
-                        <button
-                            class="add-btn"
-                            onclick="addToCart(
-                            'Ureni of the Unwritten',
-                            17.99
-                            )">
-
-                            + Agregar
-
-                        </button>
-
                     </div>
-
-                </div>
+                }
 
             </div>
 
@@ -184,3 +165,36 @@
     </div>
 
 </div>
+
+<script>
+    function addBudgetCardToCart(button){
+
+        addToCart(
+            button.dataset.cardName,
+            parseFloat(button.dataset.cardPrice)
+        );
+
+    }
+
+    function filterBudgetCards(text){
+
+        const searchValue =
+            text.toLowerCase().trim();
+
+        const cards =
+            document.querySelectorAll(".budget-card");
+
+        cards.forEach(card => {
+
+            const cardName =
+                (card.dataset.cardName || "").toLowerCase();
+
+            card.style.display =
+                cardName.includes(searchValue)
+                    ? "block"
+                    : "none";
+
+        });
+
+    }
+</script>
