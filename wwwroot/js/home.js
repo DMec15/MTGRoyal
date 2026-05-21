@@ -359,8 +359,7 @@ function updateBudget(){
     if(
         !budgetInput ||
         !spentText ||
-        !remainingText ||
-        !progress
+        !remainingText
     ){
         return;
     }
@@ -382,25 +381,40 @@ function updateBudget(){
     remainingText.innerText =
         `Restante: $${remaining.toFixed(2)}`;
 
-    progress.style.width =
-        `${Math.min(percent,100)}%`;
+    if(progress){
 
-    if(percent > 100){
+        progress.style.width =
+            `${Math.min(percent,100)}%`;
 
-        progress.style.background =
-            "#f44336";
+        if(percent > 100){
+
+            progress.style.background =
+                "#f44336";
+
+        }
+        else if(percent > 75){
+
+            progress.style.background =
+                "#ff9800";
+
+        }
+        else{
+
+            progress.style.background =
+                "#4caf50";
+
+        }
 
     }
-    else if(percent > 75){
 
-        progress.style.background =
-            "#ff9800";
+    if(typeof window.updateBudgetChart === "function"){
 
-    }
-    else{
-
-        progress.style.background =
-            "#4caf50";
+        window.updateBudgetChart({
+            budget,
+            totalSpent,
+            remaining,
+            percent
+        });
 
     }
 

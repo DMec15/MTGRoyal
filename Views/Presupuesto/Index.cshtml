@@ -37,31 +37,6 @@
 
         </div>
 
-        <div class="budget-progress-section">
-
-            <div class="budget-values">
-
-                <span id="spentText">
-                    Gastado: $0.00
-                </span>
-
-                <span id="remainingText">
-                    Restante: $0.00
-                </span>
-
-            </div>
-
-            <div class="progress-bar">
-
-                <div
-                    class="progress-fill"
-                    id="progressFill">
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
 
     <div class="budget-content">
@@ -138,6 +113,28 @@
 
         <div class="cart-section">
 
+            <div class="budget-chart-section">
+
+                <div class="budget-chart-wrapper">
+
+                    <canvas id="budgetChart"></canvas>
+
+                </div>
+
+                <div class="budget-values">
+
+                    <span id="spentText">
+                        Gastado: $0.00
+                    </span>
+
+                    <span id="remainingText">
+                        Restante: $0.00
+                    </span>
+
+                </div>
+
+            </div>
+
             <h2 class="section-title">
                 🛒 Mi Carrito
             </h2>
@@ -166,7 +163,92 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
+    let budgetChart;
+
+    function getBudgetChartColor(percent){
+
+        if(percent > 100)
+            return "#f44336";
+
+        if(percent > 75)
+            return "#ff9800";
+
+        return "#4caf50";
+
+    }
+
+    function initializeBudgetChart(){
+
+        const chartCanvas =
+            document.getElementById("budgetChart");
+
+        if(!chartCanvas || typeof Chart === "undefined")
+            return;
+
+        budgetChart =
+            new Chart(chartCanvas, {
+                type: "doughnut",
+                data: {
+                    labels: ["Gastado", "Restante"],
+                    datasets: [{
+                        data: [0, 1],
+                        backgroundColor: ["#4caf50", "#2a2f4a"],
+                        borderColor: ["#1a1f3a", "#1a1f3a"],
+                        borderWidth: 4,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "68%",
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: context =>
+                                    `${context.label}: $${context.parsed.toFixed(2)}`
+                            }
+                        }
+                    }
+                }
+            });
+
+    }
+
+    window.updateBudgetChart = function(summary){
+
+        if(!budgetChart)
+            return;
+
+        const spent =
+            summary.totalSpent;
+
+        const remaining =
+            Math.max(summary.remaining, 0);
+
+        const hasBudget =
+            summary.budget > 0;
+
+        budgetChart.data.datasets[0].data =
+            hasBudget
+                ? [spent, remaining]
+                : [0, 1];
+
+        budgetChart.data.datasets[0].backgroundColor = [
+            getBudgetChartColor(summary.percent),
+            "#2a2f4a"
+        ];
+
+        budgetChart.update();
+
+    };
+
     function addBudgetCardToCart(button){
 
         addToCart(
@@ -197,4 +279,6 @@
         });
 
     }
+
+    initializeBudgetChart();
 </script>
