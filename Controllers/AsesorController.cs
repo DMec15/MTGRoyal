@@ -6,14 +6,20 @@ namespace MTGRoyal.Controllers
     public class AsesorController : Controller
     {
         private readonly IAService servicioAsesor;
+        private readonly TemporaryStateService temporaryState;
 
-        public AsesorController(IAService servicioAsesor)
+        public AsesorController(
+            IAService servicioAsesor,
+            TemporaryStateService temporaryState)
         {
             this.servicioAsesor = servicioAsesor;
+            this.temporaryState = temporaryState;
         }
 
         public IActionResult Index()
         {
+            ViewBag.ChatMessages = temporaryState.GetAdvisorMessages();
+
             return View();
         }
 
@@ -21,13 +27,17 @@ namespace MTGRoyal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(string prompt)
         {
-            ViewBag.Prompt = prompt;
-
             if (string.IsNullOrWhiteSpace(prompt))
+            {
+                ViewBag.ChatMessages = temporaryState.GetAdvisorMessages();
                 return View();
+            }
 
             var respuesta = await servicioAsesor.GenerarTexto(prompt);
-            ViewBag.Texto = respuesta;
+
+            temporaryState.AddAdvisorExchange(prompt, respuesta);
+            ViewBag.ChatMessages = temporaryState.GetAdvisorMessages();
+
             return View();
         }
     }

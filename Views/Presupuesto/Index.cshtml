@@ -1,5 +1,6 @@
 @model IEnumerable<MTGRoyal.Models.Carta>
 @using System.Globalization
+@using System.Text.Json
 
 <div class="budget-container">
 
@@ -167,6 +168,14 @@
 
 <script>
     let budgetChart;
+    let isRestoringBudgetState = false;
+    let budgetSaveTimer;
+    const persistedBudgetState = @Html.Raw(JsonSerializer.Serialize(
+        ViewBag.BudgetState,
+        new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        }));
 
     function getBudgetChartColor(percent){
 
@@ -280,5 +289,85 @@
 
     }
 
-    initializeBudgetChart();
+    window.persistBudgetState = function(useKeepAlive, saveImmediately){
+
+        if(isRestoringBudgetState)
+            return;
+
+        clearTimeout(budgetSaveTimer);
+
+        const save = () => {
+
+            const budgetInput =
+                document.getElementById("budgetInput");
+
+            fetch("/Presupuesto/GuardarEstado", {
+                method: "POST",
+                keepalive: useKeepAlive === true,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    budget: parseFloat(budgetInput?.value) || 0,
+                    items: cart.map(item => ({
+                        name: item.name,
+                        price: item.price,
+                        quantity: item.quantity
+                    }))
+                })
+            });
+
+        };
+
+        if(saveImmediately === true){
+
+            save();
+            return;
+
+        }
+
+        budgetSaveTimer = setTimeout(save, 250);
+
+    };
+
+    function restoreBudgetState(){
+
+        if(!persistedBudgetState)
+            return;
+
+        const budgetInput =
+            document.getElementById("budgetInput");
+
+        isRestoringBudgetState = true;
+
+        if(budgetInput && persistedBudgetState.budget > 0){
+            budgetInput.value =
+                persistedBudgetState.budget;
+        }
+
+        cart = (persistedBudgetState.items || []).map(item => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        }));
+
+        renderCart();
+        updateBudget();
+
+        isRestoringBudgetState = false;
+
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        initializeBudgetChart();
+        restoreBudgetState();
+
+    });
+
+    window.addEventListener("beforeunload", () => {
+
+        window.persistBudgetState(true, true);
+
+    });
 </script>

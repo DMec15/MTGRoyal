@@ -1,3 +1,10 @@
+@using MTGRoyal.Services
+@{
+    var chatMessages =
+        ViewBag.ChatMessages as IEnumerable<AdvisorMessageState>
+        ?? Enumerable.Empty<AdvisorMessageState>();
+}
+
 <form
     id="advisorForm"
     asp-action="Index"
@@ -87,23 +94,17 @@
 
                 </div>
 
-                @if (ViewBag.Prompt is string userPrompt && !string.IsNullOrWhiteSpace(userPrompt))
+                @foreach (var message in chatMessages)
                 {
-                    <div class="message user-message">
+                    var messageClass =
+                        message.Role == "user"
+                            ? "user-message"
+                            : "ai-message";
+
+                    <div class="message @messageClass">
 
                         <div class="message-bubble">
-                            @userPrompt
-                        </div>
-
-                    </div>
-                }
-
-                @if (ViewBag.Texto is string respuesta && !string.IsNullOrWhiteSpace(respuesta))
-                {
-                    <div class="message ai-message">
-
-                        <div class="message-bubble">
-                            @respuesta
+                            @message.Text
                         </div>
 
                     </div>

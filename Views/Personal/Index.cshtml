@@ -59,6 +59,7 @@
             }
 
             <form
+                id="personalCreateForm"
                 asp-controller="Personal"
                 asp-action="Index"
                 method="post">
@@ -308,6 +309,81 @@
                 cardName.includes(searchValue)
                     ? "flex"
                     : "none";
+
+        });
+
+    }
+</script>
+
+<script>
+    const personalCreateForm =
+        document.getElementById("personalCreateForm");
+
+    let personalDraftTimer;
+
+    function collectPersonalDraft(){
+
+        if(!personalCreateForm)
+            return null;
+
+        const formData =
+            new FormData(personalCreateForm);
+
+        return {
+            nombre: formData.get("Nombre") || "",
+            precio: parseFloat(formData.get("Precio")) || 0,
+            rarezaId: parseInt(formData.get("RarezaId")) || 0,
+            tipo: formData.get("Tipo") || "",
+            coleccion: formData.get("Coleccion") || "",
+            imagenUrl: formData.get("ImagenUrl") || "",
+            colorIds: formData
+                .getAll("ColorIds")
+                .map(value => parseInt(value))
+                .filter(value => !Number.isNaN(value))
+        };
+
+    }
+
+    function savePersonalDraft(useKeepAlive){
+
+        const draft =
+            collectPersonalDraft();
+
+        if(!draft)
+            return;
+
+        fetch("/Personal/GuardarBorrador", {
+            method: "POST",
+            keepalive: useKeepAlive === true,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(draft)
+        });
+
+    }
+
+    if(personalCreateForm){
+
+        personalCreateForm.addEventListener("input", () => {
+
+            clearTimeout(personalDraftTimer);
+
+            personalDraftTimer =
+                setTimeout(savePersonalDraft, 300);
+
+        });
+
+        personalCreateForm.addEventListener("change", () => {
+
+            clearTimeout(personalDraftTimer);
+            savePersonalDraft();
+
+        });
+
+        window.addEventListener("beforeunload", () => {
+
+            savePersonalDraft(true);
 
         });
 

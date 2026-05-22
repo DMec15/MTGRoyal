@@ -1,16 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MTGRoyal.Models;
+using MTGRoyal.Services;
 
 namespace MTGRoyal.Controllers
 {
     public class PersonalController : Controller
     {
         private readonly MtgroyalDbContext _db;
+        private readonly TemporaryStateService temporaryState;
 
-        public PersonalController(MtgroyalDbContext db)
+        public PersonalController(
+            MtgroyalDbContext db,
+            TemporaryStateService temporaryState)
         {
             _db = db;
+            this.temporaryState = temporaryState;
         }
 
         public class CartaCreateRequest
@@ -33,12 +38,24 @@ namespace MTGRoyal.Controllers
         public async Task<IActionResult> Index()
         {
             await LoadFormOptions();
+            await LoadAdminCards();
 
-            ViewBag.Cartas = await _db.Cartas
-                .Include(c => c.Rareza)
-                .Include(c => c.Colors)
-                .OrderBy(c => c.Nombre)
-                .ToListAsync();
+            var draft = temporaryState.GetPersonalDraft();
+
+            if (HasPersonalDraft(draft))
+            {
+                ViewBag.Form = new CartaCreateRequest
+                {
+                    Nombre = draft.Nombre,
+                    Precio = draft.Precio,
+                    RarezaId = draft.RarezaId,
+                    Tipo = draft.Tipo,
+                    Coleccion = draft.Coleccion,
+                    ImagenUrl = draft.ImagenUrl,
+                    ColorIds = draft.ColorIds
+                };
+            }
+
 
             return View();
         }
@@ -72,6 +89,7 @@ namespace MTGRoyal.Controllers
             {
                 ViewBag.Form = request;
                 await LoadFormOptions();
+                await LoadAdminCards();
                 return View();
             }
 
@@ -96,10 +114,19 @@ namespace MTGRoyal.Controllers
 
             _db.Cartas.Add(carta);
             await _db.SaveChangesAsync();
+            temporaryState.ClearPersonalDraft();
 
             TempData["SuccessMessage"] = "Carta agregada correctamente.";
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public IActionResult GuardarBorrador([FromBody] PersonalDraftState draft)
+        {
+            temporaryState.SavePersonalDraft(draft);
+
+            return Ok();
         }
 
         private async Task LoadFormOptions()
@@ -111,6 +138,26 @@ namespace MTGRoyal.Controllers
             ViewBag.Rarezas = await _db.Rarezas
                 .OrderBy(rareza => rareza.Nombre)
                 .ToListAsync();
+        }
+
+        private async Task LoadAdminCards()
+        {
+            ViewBag.Cartas = await _db.Cartas
+                .Include(c => c.Rareza)
+                .Include(c => c.Colors)
+                .OrderBy(c => c.Nombre)
+                .ToListAsync();
+        }
+
+        private static bool HasPersonalDraft(PersonalDraftState draft)
+        {
+            return !string.IsNullOrWhiteSpace(draft.Nombre) ||
+                draft.Precio > 0 ||
+                draft.RarezaId > 0 ||
+                !string.IsNullOrWhiteSpace(draft.Tipo) ||
+                !string.IsNullOrWhiteSpace(draft.Coleccion) ||
+                !string.IsNullOrWhiteSpace(draft.ImagenUrl) ||
+                draft.ColorIds.Length > 0;
         }
 
         [HttpPost]

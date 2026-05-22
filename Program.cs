@@ -32,6 +32,8 @@ builder.Services.AddHttpClient<ScryfallService>(client =>
     client.DefaultRequestHeaders.Accept.ParseAdd("application/json;q=0.9,*/*;q=0.8");
 });
 
+builder.Services.AddSingleton<TemporaryStateService>();
+
 builder.Services.AddScoped<IAService>();
 
 var app = builder.Build();

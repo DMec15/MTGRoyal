@@ -420,6 +420,12 @@ function updateBudget(){
 
     }
 
+    if(typeof window.persistBudgetState === "function"){
+
+        window.persistBudgetState();
+
+    }
+
 }
 
 /* ====================================================

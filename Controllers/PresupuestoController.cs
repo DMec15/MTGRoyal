@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MTGRoyal.Models;
+using MTGRoyal.Services;
 
 namespace MTGRoyal.Controllers
 {
@@ -8,10 +9,14 @@ namespace MTGRoyal.Controllers
     {
 
         private readonly MtgroyalDbContext _db;
+        private readonly TemporaryStateService temporaryState;
 
-        public PresupuestoController(MtgroyalDbContext db)
+        public PresupuestoController(
+            MtgroyalDbContext db,
+            TemporaryStateService temporaryState)
         {
             _db = db;
+            this.temporaryState = temporaryState;
         }
 
         public async Task<IActionResult> Index()
@@ -22,7 +27,17 @@ namespace MTGRoyal.Controllers
                 .Include(c => c.Colors)
                 .ToListAsync();
 
+            ViewBag.BudgetState = temporaryState.GetBudgetState();
+
             return View(cartas);
+        }
+
+        [HttpPost]
+        public IActionResult GuardarEstado([FromBody] BudgetState state)
+        {
+            temporaryState.SaveBudgetState(state);
+
+            return Ok();
         }
     }
 }
