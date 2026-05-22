@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MTGRoyal.Models;
+using MTGRoyal.Services;
+using OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,26 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<MtgroyalDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("conexion")));
+
+// Agregar el servicio de configuración para la IA
+builder.Services.Configure<ConfiguracionIA>(builder.Configuration.GetSection("OpenAI"));
+
+builder.Services.AddMemoryCache();
+
+builder.Services.AddSingleton(s =>
+{
+   var settings = s.GetRequiredService<IOptions<ConfiguracionIA>>().Value;
+   return new OpenAIClient(settings.ApiKey); 
+});
+
+builder.Services.AddHttpClient<ScryfallService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.scryfall.com/");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("MTGRoyal/1.0");
+    client.DefaultRequestHeaders.Accept.ParseAdd("application/json;q=0.9,*/*;q=0.8");
+});
+
+builder.Services.AddScoped<IAService>();
 
 var app = builder.Build();
 

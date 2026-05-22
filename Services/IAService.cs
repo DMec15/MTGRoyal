@@ -1,38 +1,47 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using MTGRoyal.Models;
 using OpenAI;
 using OpenAI.Chat;
-using MTGRoyal.Models;
 
 namespace MTGRoyal.Services
 {
     public class IAService
     {
         private readonly ChatClient chat;
-        
-        public IAService(IOptions<ConfiguracionIA> config)
+        private readonly ScryfallService scryfallService;
+
+        public IAService(
+            IOptions<ConfiguracionIA> config,
+            ScryfallService scryfallService)
         {
             var info = config.Value;
             var cliente = new OpenAIClient(info.ApiKey);
 
             chat = cliente.GetChatClient(info.ModeloTexto);
+            this.scryfallService = scryfallService;
         }
 
         public async Task<string> GenerarTexto(string prompt)
         {
+            var contextoScryfall =
+                await scryfallService.BuildCompactContextAsync(prompt);
+
+            var contexto =
+                string.IsNullOrWhiteSpace(contextoScryfall)
+                    ? "No se encontro contexto especifico en Scryfall para esta consulta."
+                    : contextoScryfall;
+
             var resultado = await chat.CompleteChatAsync(
                 new ChatMessage[]
                 {
-                    ChatMessage.CreateSystemMessage("Eres un experto en Magic: The Gathering y tu tarea es ayudar a los usuarios a crear mazos de cartas. Responde a las preguntas sobre estrategias, combinaciones de cartas y recomendaciones para construir mazos efectivos. También debes proporcionar información vigente sobre precios y disponibilidad de cartas, así como sugerencias para mejorar los mazos existentes. Asegúrate de ser claro, conciso y útil en tus respuestas."),
-                    ChatMessage.CreateUserMessage(prompt)
-                }
-            );
+                    ChatMessage.CreateSystemMessage(
+                        "Eres un experto en Magic: The Gathering. Ayuda a crear mazos, explicar cartas, reglas, estrategias y recomendaciones. Usa el contexto de Scryfall cuando este disponible. Si no hay datos suficientes, dilo claramente y pide el nombre exacto de la carta o formato. Responde de forma breve y util para ahorrar tokens."),
+
+                    ChatMessage.CreateUserMessage(
+                        $"Contexto externo:\n{contexto}\n\nPregunta del usuario:\n{prompt}")
+                });
 
             return resultado.Value.Content[0].Text;
         }
-
     }
 }

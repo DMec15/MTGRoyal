@@ -1,72 +1,69 @@
-<div class="advisor-container">
+<form
+    id="advisorForm"
+    asp-action="Index"
+    method="post">
 
-    <div class="advisor-header">
+    @Html.AntiForgeryToken()
 
-        <div class="advisor-top">
+    <div class="advisor-container">
 
-            <div class="advisor-avatar">
-                🤖
+        <div class="advisor-header">
+
+            <div class="advisor-top">
+
+                <div class="advisor-avatar">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h1 class="advisor-title">
+                        Asesor con IA
+                    </h1>
+
+                    <p class="advisor-subtitle">
+                        Tu experto personal en Magic: The Gathering
+                    </p>
+
+                </div>
+
             </div>
 
-            <div>
+            <div class="suggested-section">
 
-                <h1 class="advisor-title">
-                    Asesor con IA
-                </h1>
-
-                <p class="advisor-subtitle">
-                    Tu experto personal en Magic: The Gathering
+                <p class="suggested-label">
+                    Preguntas sugeridas:
                 </p>
 
-            </div>
+                <div class="suggested-buttons">
 
-        </div>
-
-        <div class="suggested-section">
-
-            <p class="suggested-label">
-                Preguntas sugeridas:
-            </p>
-
-            <div class="suggested-buttons">
-
-                <button class="suggested-btn"
+                    <button
+                        type="button"
+                        class="suggested-btn"
                         onclick="sendSuggestedQuestion(this)">
-                    ¿Qué mazo me recomiendas para Modern?
-                </button>
+                        ¿Que mazo me recomiendas para Modern?
+                    </button>
 
-                <button class="suggested-btn"
+                    <button
+                        type="button"
+                        class="suggested-btn"
                         onclick="sendSuggestedQuestion(this)">
-                    ¿Cuáles son las mejores cartas para Commander?
-                </button>
+                        ¿Cuales son las mejores cartas para Commander?
+                    </button>
 
-                <button class="suggested-btn"
+                    <button
+                        type="button"
+                        class="suggested-btn"
                         onclick="sendSuggestedQuestion(this)">
-                    Ayúdame a mejorar mi mazo de Standard
-                </button>
+                        Ayudame a mejorar mi mazo de Standard
+                    </button>
 
-                <button class="suggested-btn"
+                    <button
+                        type="button"
+                        class="suggested-btn"
                         onclick="sendSuggestedQuestion(this)">
-                    ¿Qué cartas están subiendo de precio?
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="chat-container">
-
-        <div class="chat-messages" id="chatMessages">
-
-            <div class="message ai-message">
-
-                <div class="message-bubble">
-
-                    ¡Hola! Soy tu Asesor de Magic IA.
-                    Puedo ayudarte a construir mazos,
-                    analizar estrategias y recomendar cartas.
+                        ¿Que cartas estan subiendo de precio?
+                    </button>
 
                 </div>
 
@@ -74,24 +71,97 @@
 
         </div>
 
-        <div class="chat-input-section">
+        <div class="chat-container">
 
-            <textarea
-                id="chatInput"
-                class="chat-input"
-                placeholder="Escribe tu pregunta..."
-            ></textarea>
+            <div class="chat-messages" id="chatMessages">
 
-            <button
-                class="send-btn"
-                onclick="sendMessage()">
+                <div class="message ai-message">
 
-                ➤
+                    <div class="message-bubble">
 
-            </button>
+                        ¡Hola! Soy tu Asesor de Magic IA.
+                        Puedo ayudarte a construir mazos,
+                        analizar estrategias y recomendar cartas.
+
+                    </div>
+
+                </div>
+
+                @if (ViewBag.Prompt is string userPrompt && !string.IsNullOrWhiteSpace(userPrompt))
+                {
+                    <div class="message user-message">
+
+                        <div class="message-bubble">
+                            @userPrompt
+                        </div>
+
+                    </div>
+                }
+
+                @if (ViewBag.Texto is string respuesta && !string.IsNullOrWhiteSpace(respuesta))
+                {
+                    <div class="message ai-message">
+
+                        <div class="message-bubble">
+                            @respuesta
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+            <div class="chat-input-section">
+
+                <textarea
+                    id="chatInput"
+                    name="prompt"
+                    class="chat-input"
+                    placeholder="Escribe tu pregunta..."
+                ></textarea>
+
+                <button
+                    type="submit"
+                    class="send-btn">
+
+                    ➤
+
+                </button>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>
+</form>
+
+<script>
+    function sendSuggestedQuestion(button){
+
+        const chatInput =
+            document.getElementById("chatInput");
+
+        const advisorForm =
+            document.getElementById("advisorForm");
+
+        if(!chatInput || !advisorForm)
+            return;
+
+        chatInput.value =
+            button.innerText.trim();
+
+        advisorForm.submit();
+
+    }
+
+    const chatMessages =
+        document.getElementById("chatMessages");
+
+    if(chatMessages){
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+</script>
