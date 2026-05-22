@@ -188,11 +188,19 @@
                 Administración
             </h2>
 
+            <input
+                type="text"
+                id="adminCardSearch"
+                class="admin-card-search"
+                placeholder="Buscar carta..."
+                oninput="filterAdminCards(this.value)"
+            />
+
             <div class="admin-table">
 
                 @foreach (var carta in cartas)
                 {
-                    <div class="admin-row">
+                    <div class="admin-row" data-card-name="@(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(carta.Nombre))">
 
                         <div class="admin-info">
 
@@ -204,7 +212,7 @@
                             <div>
 
                                 <h3 class="admin-card-title">
-                                    @carta.Nombre
+                                    @(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(carta.Nombre))
                                 </h3>
 
                                 <p class="admin-card-text">
@@ -232,7 +240,7 @@
                                 class="edit-btn"
                                 onclick="openEditModal(
                                     '@carta.Id',
-                                    '@carta.Nombre',
+                                    '@(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(carta.Nombre))',
                                     '@carta.Precio',
                                     '@carta.RarezaId',
                                     '@carta.Tipo',
@@ -281,6 +289,30 @@
     </div>
 
 </div>
+
+<script>
+    function filterAdminCards(text){
+
+        const searchValue =
+            text.toLowerCase().trim();
+
+        const rows =
+            document.querySelectorAll(".admin-row");
+
+        rows.forEach(row => {
+
+            const cardName =
+                (row.dataset.cardName || "").toLowerCase();
+
+            row.style.display =
+                cardName.includes(searchValue)
+                    ? "flex"
+                    : "none";
+
+        });
+
+    }
+</script>
 
 <!-- MODAL EDITAR -->
 
