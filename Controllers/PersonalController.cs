@@ -33,6 +33,13 @@ namespace MTGRoyal.Controllers
         public async Task<IActionResult> Index()
         {
             await LoadFormOptions();
+
+            ViewBag.Cartas = await _db.Cartas
+                .Include(c => c.Rareza)
+                .Include(c => c.Colors)
+                .OrderBy(c => c.Nombre)
+                .ToListAsync();
+
             return View();
         }
 
@@ -104,6 +111,56 @@ namespace MTGRoyal.Controllers
             ViewBag.Rarezas = await _db.Rarezas
                 .OrderBy(rareza => rareza.Nombre)
                 .ToListAsync();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(
+            int id,
+            string nombre,
+            decimal precio,
+            int rarezaId,
+            string tipo,
+            string? coleccion,
+            string? imagenUrl)
+        {
+            var carta = await _db.Cartas.FindAsync(id);
+
+            if (carta == null)
+                return NotFound();
+
+            carta.Nombre = nombre;
+            carta.Precio = precio;
+            carta.RarezaId = rarezaId;
+            carta.Tipo = tipo;
+            carta.Coleccion = coleccion;
+            carta.ImagenUrl = imagenUrl;
+
+            await _db.SaveChangesAsync();
+
+            TempData["SuccessMessage"] =
+                "Carta editada correctamente.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            var carta = await _db.Cartas.FindAsync(id);
+
+            if (carta == null)
+                return NotFound();
+
+            _db.Cartas.Remove(carta);
+
+            await _db.SaveChangesAsync();
+
+            TempData["SuccessMessage"] =
+                "Carta eliminada correctamente.";
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -550,3 +550,43 @@ if(typeof cardId !== "undefined"){
     }
 
 }
+
+/* ====================================================
+   MODAL DE EDICIÓN
+==================================================== */
+
+function openEditModal(
+    id,
+    nombre,
+    precio,
+    rarezaId,
+    tipo,
+    coleccion,
+    imagen
+){
+
+    document.getElementById("editId").value = id;
+
+    document.getElementById("editNombre").value = nombre;
+
+    document.getElementById("editPrecio").value = precio;
+
+    document.getElementById("editRarezaId").value = rarezaId;
+
+    document.getElementById("editTipo").value = tipo;
+
+    document.getElementById("editColeccion").value = coleccion;
+
+    document.getElementById("editImagen").value = imagen;
+
+    document.getElementById("editModal").style.display =
+        "flex";
+
+}
+
+function closeEditModal(){
+
+    document.getElementById("editModal").style.display =
+        "none";
+
+}

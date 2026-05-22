@@ -1209,3 +1209,60 @@ html, body {
     margin-top:15px;
     line-height:1.7;
 }
+
+/* Editar y eliminar cartas */
+
+.admin-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#0f1329;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:15px;
+}
+
+.admin-info{
+    display:flex;
+    gap:20px;
+    align-items:center;
+}
+
+.admin-image{
+    width:80px;
+    border-radius:10px;
+}
+
+.admin-card-title{
+    color:white;
+    margin-bottom:5px;
+}
+
+.admin-card-text{
+    color:#a0a0a0;
+}
+
+.admin-actions{
+    display:flex;
+    gap:15px;
+}
+
+.edit-btn{
+    background:#1976d2;
+    border:none;
+    padding:12px 18px;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.delete-btn{
+    background:#d32f2f;
+    border:none;
+    padding:12px 18px;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+    font-weight:700;
+}

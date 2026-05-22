@@ -1,12 +1,26 @@
 @using MTGRoyal.Controllers
+
 @{
     var form = ViewBag.Form as PersonalController.CartaCreateRequest;
-    var rarezas = ViewBag.Rarezas as IEnumerable<MTGRoyal.Models.Rareza> ?? Enumerable.Empty<MTGRoyal.Models.Rareza>();
-    var colores = ViewBag.Colores as IEnumerable<MTGRoyal.Models.Colore> ?? Enumerable.Empty<MTGRoyal.Models.Colore>();
+
+    var rarezas =
+        ViewBag.Rarezas as IEnumerable<MTGRoyal.Models.Rareza>
+        ?? Enumerable.Empty<MTGRoyal.Models.Rareza>();
+
+    var colores =
+        ViewBag.Colores as IEnumerable<MTGRoyal.Models.Colore>
+        ?? Enumerable.Empty<MTGRoyal.Models.Colore>();
+
+    var cartas =
+        ViewBag.Cartas as IEnumerable<MTGRoyal.Models.Carta>
+        ?? Enumerable.Empty<MTGRoyal.Models.Carta>();
+
     var selectedColors = form?.ColorIds ?? [];
 }
 
 <div class="personal-container">
+
+    <!-- HEADER -->
 
     <div class="personal-header">
 
@@ -21,6 +35,8 @@
     </div>
 
     <div class="personal-content">
+
+        <!-- FORMULARIO -->
 
         <div class="personal-card">
 
@@ -42,7 +58,10 @@
                 </div>
             }
 
-            <form asp-controller="Personal" asp-action="Index" method="post">
+            <form
+                asp-controller="Personal"
+                asp-action="Index"
+                method="post">
 
                 @Html.AntiForgeryToken()
 
@@ -79,8 +98,12 @@
 
                         @foreach (var rareza in rarezas)
                         {
-                            <option value="@rareza.Id" selected="@(form?.RarezaId == rareza.Id)">
+                            <option
+                                value="@rareza.Id"
+                                selected="@(form?.RarezaId == rareza.Id)">
+
                                 @rareza.Nombre
+
                             </option>
                         }
 
@@ -113,6 +136,8 @@
 
                 </div>
 
+                <!-- COLORES -->
+
                 <div class="personal-color-section">
 
                     <span class="personal-color-label">
@@ -143,26 +168,228 @@
 
                 </div>
 
-                <button type="submit" class="save-btn">
+                <button
+                    type="submit"
+                    class="save-btn">
+
                     Guardar Carta
+
                 </button>
 
             </form>
 
         </div>
 
+        <!-- ADMINISTRACION -->
+
         <div class="personal-card">
 
             <h2 class="section-title">
-                Administracion
+                Administración
             </h2>
 
-            <p class="admin-text">
-                Aqui podras editar, eliminar y administrar
-                todas las cartas registradas en la base de datos.
-            </p>
+            <div class="admin-table">
+
+                @foreach (var carta in cartas)
+                {
+                    <div class="admin-row">
+
+                        <div class="admin-info">
+
+                            <img
+                                src="@carta.ImagenUrl"
+                                class="admin-image"
+                            />
+
+                            <div>
+
+                                <h3 class="admin-card-title">
+                                    @carta.Nombre
+                                </h3>
+
+                                <p class="admin-card-text">
+                                    @carta.Tipo
+                                </p>
+
+                                <p class="admin-card-text">
+                                    $@carta.Precio
+                                </p>
+
+                                <p class="admin-card-text">
+                                    @carta.Coleccion
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="admin-actions">
+
+                            <!-- EDITAR -->
+
+                            <button
+                                type="button"
+                                class="edit-btn"
+                                onclick="openEditModal(
+                                    '@carta.Id',
+                                    '@carta.Nombre',
+                                    '@carta.Precio',
+                                    '@carta.RarezaId',
+                                    '@carta.Tipo',
+                                    '@carta.Coleccion',
+                                    '@carta.ImagenUrl'
+                                )">
+
+                                Editar
+
+                            </button>
+
+                            <!-- ELIMINAR -->
+
+                            <form
+                                asp-action="Eliminar"
+                                method="post"
+                                onsubmit='return confirm("Estas seguro de eliminar la carta: @(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(carta.Nombre)) ?")'>
+
+                                @Html.AntiForgeryToken()
+
+                                <input
+                                    type="hidden"
+                                    name="id"
+                                    value="@carta.Id"
+                                />
+
+                                <button
+                                    type="submit"
+                                    class="delete-btn">
+
+                                    Eliminar
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
 
         </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL EDITAR -->
+
+<div id="editModal" class="modal-overlay">
+
+    <div class="modal-content">
+
+        <h2 class="section-title">
+            Editar Carta
+        </h2>
+
+        <form
+            asp-action="Editar"
+            method="post">
+
+            @Html.AntiForgeryToken()
+
+            <input
+                type="hidden"
+                id="editId"
+                name="id"
+            />
+
+            <div class="form-grid">
+
+                <input
+                    type="text"
+                    id="editNombre"
+                    name="nombre"
+                    class="personal-input"
+                    placeholder="Nombre"
+                />
+
+                <input
+                    type="number"
+                    step="0.01"
+                    id="editPrecio"
+                    name="precio"
+                    class="personal-input"
+                    placeholder="Precio"
+                />
+
+                <select
+                    id="editRarezaId"
+                    name="rarezaId"
+                    class="personal-input">
+
+                    @foreach (var rareza in rarezas)
+                    {
+                        <option value="@rareza.Id">
+                            @rareza.Nombre
+                        </option>
+                    }
+
+                </select>
+
+                <input
+                    type="text"
+                    id="editTipo"
+                    name="tipo"
+                    class="personal-input"
+                    placeholder="Tipo"
+                />
+
+                <input
+                    type="text"
+                    id="editColeccion"
+                    name="coleccion"
+                    class="personal-input"
+                    placeholder="Colección"
+                />
+
+                <input
+                    type="text"
+                    id="editImagen"
+                    name="imagenUrl"
+                    class="personal-input"
+                    placeholder="Ruta de imagen"
+                />
+
+            </div>
+
+            <div
+                style="
+                    margin-top:20px;
+                    display:flex;
+                    gap:15px;
+                ">
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    Guardar Cambios
+
+                </button>
+
+                <button
+                    type="button"
+                    class="delete-btn"
+                    onclick="closeEditModal()">
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </form>
 
     </div>
 
