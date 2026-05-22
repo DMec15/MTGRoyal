@@ -125,6 +125,7 @@
                         class="personal-input"
                         placeholder="Coleccion"
                         value="@form?.Coleccion"
+                        required
                     />
 
                     <input
@@ -133,6 +134,7 @@
                         class="personal-input"
                         placeholder="Ruta de imagen"
                         value="@form?.ImagenUrl"
+                        required
                     />
 
                 </div>
@@ -155,6 +157,7 @@
                                     type="checkbox"
                                     name="ColorIds"
                                     value="@color.Id"
+                                    class="create-color-checkbox"
                                     checked="@selectedColors.Contains(color.Id)"
                                 />
 
@@ -365,6 +368,22 @@
 
     if(personalCreateForm){
 
+        personalCreateForm.addEventListener("submit", event => {
+
+            const checkedColors =
+                personalCreateForm.querySelectorAll(
+                    ".create-color-checkbox:checked"
+                );
+
+            if(checkedColors.length === 0){
+
+                event.preventDefault();
+                alert("Selecciona al menos un color.");
+
+            }
+
+        });
+
         personalCreateForm.addEventListener("input", () => {
 
             clearTimeout(personalDraftTimer);
@@ -420,6 +439,7 @@
                     name="nombre"
                     class="personal-input"
                     placeholder="Nombre"
+                    required
                 />
 
                 <input
@@ -429,12 +449,15 @@
                     name="precio"
                     class="personal-input"
                     placeholder="Precio"
+                    min="0"
+                    required
                 />
 
                 <select
                     id="editRarezaId"
                     name="rarezaId"
-                    class="personal-input">
+                    class="personal-input"
+                    required>
 
                     @foreach (var rareza in rarezas)
                     {
@@ -451,6 +474,7 @@
                     name="tipo"
                     class="personal-input"
                     placeholder="Tipo"
+                    required
                 />
 
                 <input

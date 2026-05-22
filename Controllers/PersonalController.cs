@@ -70,6 +70,15 @@ namespace MTGRoyal.Controllers
             if (string.IsNullOrWhiteSpace(request.Tipo))
                 ModelState.AddModelError(nameof(request.Tipo), "El tipo es obligatorio.");
 
+            if (string.IsNullOrWhiteSpace(request.Coleccion))
+                ModelState.AddModelError(nameof(request.Coleccion), "La coleccion es obligatoria.");
+
+            if (string.IsNullOrWhiteSpace(request.ImagenUrl))
+                ModelState.AddModelError(nameof(request.ImagenUrl), "La imagen es obligatoria.");
+
+            if (request.ColorIds.Length == 0)
+                ModelState.AddModelError(nameof(request.ColorIds), "Selecciona al menos un color.");
+
             if (request.RarezaId <= 0)
                 ModelState.AddModelError(nameof(request.RarezaId), "La rareza es obligatoria.");
 
@@ -171,6 +180,19 @@ namespace MTGRoyal.Controllers
             string? coleccion,
             string? imagenUrl)
         {
+            if (string.IsNullOrWhiteSpace(nombre) ||
+                string.IsNullOrWhiteSpace(tipo) ||
+                string.IsNullOrWhiteSpace(coleccion) ||
+                string.IsNullOrWhiteSpace(imagenUrl) ||
+                rarezaId <= 0 ||
+                precio < 0)
+            {
+                TempData["SuccessMessage"] =
+                    "No se pudo editar la carta: faltan datos obligatorios.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
             var carta = await _db.Cartas.FindAsync(id);
 
             if (carta == null)
