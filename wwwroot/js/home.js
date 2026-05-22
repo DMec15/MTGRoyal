@@ -121,8 +121,10 @@ function filterCards(){
         const cardRarity =
             card.dataset.rarity;
 
-        const cardType =
-            card.dataset.type;
+        const cardTypes =
+            card.dataset.type
+                .split(",")
+                .map(type => type.trim().toLowerCase());
 
         const cardColors =
             card.dataset.colors.split(",");
@@ -136,7 +138,7 @@ function filterCards(){
 
         const matchesType =
             typeValue === "" ||
-            cardType === typeValue;
+            cardTypes.includes(typeValue.toLowerCase());
 
         const matchesColors =
             selectedColors.length === 0 ||
