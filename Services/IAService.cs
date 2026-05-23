@@ -10,6 +10,7 @@ namespace MTGRoyal.Services
         private readonly ChatClient chat;
         private readonly ScryfallService scryfallService;
 
+        // Configura el cliente de OpenAI y recibe el servicio de Scryfall.
         public IAService(
             IOptions<ConfiguracionIA> config,
             ScryfallService scryfallService)
@@ -21,6 +22,7 @@ namespace MTGRoyal.Services
             this.scryfallService = scryfallService;
         }
 
+        // Genera una respuesta de IA usando contexto compacto de Scryfall.
         public async Task<string> GenerarTexto(string prompt)
         {
             var contextoScryfall =
@@ -36,6 +38,7 @@ namespace MTGRoyal.Services
                 {
                     ChatMessage.CreateSystemMessage(
                         "Eres un experto en Magic: The Gathering. Ayuda a crear mazos, explicar cartas, reglas, estrategias y recomendaciones. Usa el contexto de Scryfall cuando este disponible. Si no hay datos suficientes, dilo claramente y pide el nombre exacto de la carta o formato. Responde de forma breve y util para ahorrar tokens."),
+
 
                     ChatMessage.CreateUserMessage(
                         $"Contexto externo:\n{contexto}\n\nPregunta del usuario:\n{prompt}")

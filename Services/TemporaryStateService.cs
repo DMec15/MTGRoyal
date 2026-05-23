@@ -8,6 +8,7 @@ namespace MTGRoyal.Services
         private readonly List<AdvisorMessageState> advisorMessages = new();
         private PersonalDraftState personalDraft = new();
 
+        // Obtiene una copia del presupuesto y carrito guardados.
         public BudgetState GetBudgetState()
         {
             lock (syncRoot)
@@ -27,6 +28,7 @@ namespace MTGRoyal.Services
             }
         }
 
+        // Guarda temporalmente el presupuesto y las cartas del carrito.
         public void SaveBudgetState(BudgetState state)
         {
             lock (syncRoot)
@@ -46,6 +48,7 @@ namespace MTGRoyal.Services
             }
         }
 
+        // Obtiene una copia del historial de mensajes del asesor.
         public IReadOnlyList<AdvisorMessageState> GetAdvisorMessages()
         {
             lock (syncRoot)
@@ -60,6 +63,7 @@ namespace MTGRoyal.Services
             }
         }
 
+        // Agrega una pregunta del usuario y la respuesta de la IA.
         public void AddAdvisorExchange(string prompt, string response)
         {
             lock (syncRoot)
@@ -78,6 +82,7 @@ namespace MTGRoyal.Services
             }
         }
 
+        // Obtiene una copia del borrador del formulario de Personal.
         public PersonalDraftState GetPersonalDraft()
         {
             lock (syncRoot)
@@ -95,6 +100,7 @@ namespace MTGRoyal.Services
             }
         }
 
+        // Guarda temporalmente el borrador del formulario de Personal.
         public void SavePersonalDraft(PersonalDraftState draft)
         {
             lock (syncRoot)
@@ -112,6 +118,7 @@ namespace MTGRoyal.Services
             }
         }
 
+        // Limpia el borrador despues de guardar una carta.
         public void ClearPersonalDraft()
         {
             lock (syncRoot)

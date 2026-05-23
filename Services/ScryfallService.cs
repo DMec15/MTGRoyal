@@ -12,12 +12,14 @@ namespace MTGRoyal.Services
         private readonly HttpClient httpClient;
         private readonly IMemoryCache cache;
 
+        // Recibe el cliente HTTP y la cache usada para consultas a Scryfall.
         public ScryfallService(HttpClient httpClient, IMemoryCache cache)
         {
             this.httpClient = httpClient;
             this.cache = cache;
         }
 
+        // Construye un resumen corto de cartas relacionadas con el prompt.
         public async Task<string> BuildCompactContextAsync(string prompt)
         {
             var cardNames = ExtractCardNames(prompt);
@@ -42,6 +44,7 @@ namespace MTGRoyal.Services
             return BuildSummary(cards.Take(MaxCards));
         }
 
+        // Busca una carta por nombre aproximado en Scryfall.
         private async Task<ScryfallCard?> GetNamedCardAsync(string name)
         {
             var cacheKey = $"scryfall:named:{name.Trim().ToLowerInvariant()}";
@@ -63,6 +66,7 @@ namespace MTGRoyal.Services
             });
         }
 
+        // Busca cartas usando una consulta generada desde el prompt.
         private async Task<IReadOnlyList<ScryfallCard>> SearchCardsAsync(string prompt)
         {
             var query = BuildSearchQuery(prompt);
@@ -90,6 +94,7 @@ namespace MTGRoyal.Services
             }) ?? [];
         }
 
+        // Extrae nombres de cartas escritos entre corchetes o comillas.
         private static List<string> ExtractCardNames(string prompt)
         {
             var names = new List<string>();
@@ -110,6 +115,7 @@ namespace MTGRoyal.Services
                 .ToList();
         }
 
+        // Convierte palabras clave del prompt en filtros de busqueda.
         private static string BuildSearchQuery(string prompt)
         {
             var normalized = prompt.ToLowerInvariant();
@@ -157,6 +163,7 @@ namespace MTGRoyal.Services
             return string.Join(" ", terms);
         }
 
+        // Resume los datos importantes de las cartas encontradas.
         private static string BuildSummary(IEnumerable<ScryfallCard> cards)
         {
             var builder = new StringBuilder();
@@ -191,6 +198,7 @@ namespace MTGRoyal.Services
             return builder.ToString();
         }
 
+        // Recorta textos largos para reducir tokens enviados a la IA.
         private static string Truncate(string value, int maxLength)
         {
             if (value.Length <= maxLength)

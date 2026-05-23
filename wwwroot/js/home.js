@@ -13,6 +13,7 @@ let totalSpent = 0;
    MODAL DE CARTAS
 ========================================================= */
 
+// Abre el modal con la informacion de una carta.
 function openModal(name, image, price, rarity, type, set){
 
     document.getElementById("modalCardName").innerText = name;
@@ -31,6 +32,7 @@ function openModal(name, image, price, rarity, type, set){
 
 }
 
+// Cierra el modal de detalle de carta.
 function closeModal(){
 
     document.getElementById("cardModal").style.display = "none";
@@ -66,6 +68,7 @@ if(colorButtons.length > 0){
 
     colorButtons.forEach(button => {
 
+        // Activa o desactiva el color seleccionado.
         button.addEventListener("click", function(){
 
             const color = button.dataset.color;
@@ -99,6 +102,7 @@ if(colorButtons.length > 0){
    FILTRAR CARTAS
 ========================================================= */
 
+// Aplica los filtros activos del catalogo.
 function filterCards(){
 
     if(!searchInput || !rarityFilter || !typeFilter)
@@ -171,6 +175,7 @@ function filterCards(){
    EVENTOS CATÁLOGO
 ========================================================= */
 
+// Escucha cambios en el buscador del catalogo.
 if(searchInput){
 
     searchInput.addEventListener(
@@ -180,6 +185,7 @@ if(searchInput){
 
 }
 
+// Escucha cambios en el filtro de rareza.
 if(rarityFilter){
 
     rarityFilter.addEventListener(
@@ -189,6 +195,7 @@ if(rarityFilter){
 
 }
 
+// Escucha cambios en el filtro de tipo.
 if(typeFilter){
 
     typeFilter.addEventListener(
@@ -203,6 +210,7 @@ if(typeFilter){
    PRESUPUESTOS
 ========================================================= */
 
+// Agrega una carta al carrito o aumenta su cantidad.
 function addToCart(name, price){
 
     const existing =
@@ -228,6 +236,7 @@ function addToCart(name, price){
 }
 
 
+// Renderiza las cartas agregadas y recalcula el total.
 function renderCart(){
 
     const cartItems =
@@ -320,6 +329,7 @@ function renderCart(){
 }
 
 
+// Cambia la cantidad de una carta dentro del carrito.
 function changeQty(index,delta){
 
     cart[index].quantity += delta;
@@ -335,6 +345,7 @@ function changeQty(index,delta){
 }
 
 
+// Elimina una carta del carrito.
 function removeItem(index){
 
     cart.splice(index,1);
@@ -344,6 +355,7 @@ function removeItem(index){
 }
 
 
+// Actualiza gasto, restante, barra/grafica y persistencia.
 function updateBudget(){
 
     const budgetInput =
@@ -461,6 +473,7 @@ const mtgCards = [
    SEARCH AUTOCOMPLETE
 ==================================================== */
 
+// Busca cartas de ejemplo por nombre.
 function searchCards(text){
 
     const results =
@@ -518,6 +531,7 @@ function searchCards(text){
    REDIRECCIÓN
 ==================================================== */
 
+// Redirige al detalle de una carta de ejemplo.
 function goToCard(id){
 
     window.location.href =
@@ -563,6 +577,7 @@ if(typeof cardId !== "undefined"){
    MODAL DE EDICIÓN
 ==================================================== */
 
+// Abre el modal de edicion con los datos de la carta.
 function openEditModal(
     id,
     nombre,
@@ -592,6 +607,7 @@ function openEditModal(
 
 }
 
+// Cierra el modal de edicion.
 function closeEditModal(){
 
     document.getElementById("editModal").style.display =

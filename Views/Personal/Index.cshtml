@@ -295,6 +295,7 @@
 </div>
 
 <script>
+    //Filtra las cartas de administracion por nombre.
     function filterAdminCards(text){
 
         const searchValue =
@@ -324,6 +325,7 @@
 
     let personalDraftTimer;
 
+    // Recolecta los datos actuales del formulario de Personal.
     function collectPersonalDraft(){
 
         if(!personalCreateForm)
@@ -347,6 +349,7 @@
 
     }
 
+    // Guarda temporalmente el borrador del formulario de Personal.
     function savePersonalDraft(useKeepAlive){
 
         const draft =
@@ -368,6 +371,7 @@
 
     if(personalCreateForm){
 
+        // Valida que se seleccione al menos un color antes de guardar.
         personalCreateForm.addEventListener("submit", event => {
 
             const checkedColors =
@@ -384,6 +388,7 @@
 
         });
 
+        // Guarda el borrador poco despues de escribir en el formulario.
         personalCreateForm.addEventListener("input", () => {
 
             clearTimeout(personalDraftTimer);
@@ -393,6 +398,7 @@
 
         });
 
+        // Guarda el borrador cuando cambia un select o checkbox.
         personalCreateForm.addEventListener("change", () => {
 
             clearTimeout(personalDraftTimer);
@@ -400,6 +406,7 @@
 
         });
 
+        // Guarda el borrador antes de salir o cambiar de vista.
         window.addEventListener("beforeunload", () => {
 
             savePersonalDraft(true);

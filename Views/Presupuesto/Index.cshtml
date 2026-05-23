@@ -177,6 +177,7 @@
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         }));
 
+    // Define el color de la grafica segun el porcentaje gastado.
     function getBudgetChartColor(percent){
 
         if(percent > 100)
@@ -189,6 +190,7 @@
 
     }
 
+    // Inicializa la grafica de dona del presupuesto.
     function initializeBudgetChart(){
 
         const chartCanvas =
@@ -230,6 +232,7 @@
 
     }
 
+    // Actualiza la grafica con el gasto y restante actual.
     window.updateBudgetChart = function(summary){
 
         if(!budgetChart)
@@ -258,6 +261,7 @@
 
     };
 
+    // Agrega al carrito la carta seleccionada.
     function addBudgetCardToCart(button){
 
         addToCart(
@@ -267,6 +271,7 @@
 
     }
 
+    // Filtra las cartas disponibles por nombre.
     function filterBudgetCards(text){
 
         const searchValue =
@@ -289,6 +294,7 @@
 
     }
 
+    // Guarda temporalmente el presupuesto y carrito actual.
     window.persistBudgetState = function(useKeepAlive, saveImmediately){
 
         if(isRestoringBudgetState)
@@ -296,6 +302,7 @@
 
         clearTimeout(budgetSaveTimer);
 
+        // Envia el estado actual al controlador de presupuesto.
         const save = () => {
 
             const budgetInput =
@@ -330,6 +337,7 @@
 
     };
 
+    // Restaura el presupuesto y carrito guardados en memoria.
     function restoreBudgetState(){
 
         if(!persistedBudgetState)
@@ -358,6 +366,7 @@
 
     }
 
+    // Prepara la grafica y recupera el estado al cargar la vista.
     document.addEventListener("DOMContentLoaded", () => {
 
         initializeBudgetChart();
@@ -365,6 +374,7 @@
 
     });
 
+    // Guarda el estado antes de salir o cambiar de vista.
     window.addEventListener("beforeunload", () => {
 
         window.persistBudgetState(true, true);

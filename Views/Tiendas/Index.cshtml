@@ -58,16 +58,15 @@
     let fakeStoreMarkers = [];
 
     const fakeStoreNames = [
-        "Mana Vault TCG",
-        "Dragon's Den Collectibles",
-        "Planeswalker Hub",
-        "Lotus Market",
-        "Arcane Singles",
-        "Commander Corner",
-        "The Card Forge",
-        "Mythic Vault"
+        "Imperior",
+        "Players Checkpoint",
+        "Dragonshield",
+        "Kame House",
+        "Star City Games",
+        "Mixfield"
     ];
 
+    // Inicializa el mapa centrado en Mexico.
     function initializeStoresMap(){
 
         storesMap =
@@ -80,6 +79,7 @@
 
     }
 
+    // Consulta ciudades que coincidan con el texto buscado.
     async function fetchCities(query){
 
         const response =
@@ -91,6 +91,7 @@
 
     }
 
+    // Muestra las ciudades encontradas debajo del buscador.
     async function showCityResults(text){
 
         const query =
@@ -121,6 +122,7 @@
             result.type = "button";
             result.className = "city-search-result";
             result.innerText = city.display_name;
+            // Selecciona la ciudad al hacer clic en un resultado.
             result.addEventListener("click", () => {
 
                 selectCity(city);
@@ -133,6 +135,7 @@
 
     }
 
+    // Centra el mapa en la ciudad seleccionada.
     function selectCity(city){
 
         const lat =
@@ -158,6 +161,7 @@
 
     }
 
+    // Genera tres tiendas simuladas cerca de la ciudad.
     function generateFakeStores(lat, lon){
 
         clearFakeStores();
@@ -184,6 +188,7 @@
 
     }
 
+    // Elimina las tiendas simuladas anteriores del mapa.
     function clearFakeStores(){
 
         fakeStoreMarkers.forEach(marker => {
@@ -196,6 +201,7 @@
 
     }
 
+    // Calcula una ubicacion aleatoria cercana al centro.
     function getRandomNearbyPoint(lat, lon, radiusKm){
 
         const angle =
@@ -217,6 +223,7 @@
 
     }
 
+    // Prepara el mapa y los eventos del buscador al cargar la vista.
     document.addEventListener("DOMContentLoaded", () => {
 
         initializeStoresMap();
@@ -224,11 +231,13 @@
         const input =
             document.getElementById("citySearchInput");
 
+        // Espera un momento antes de buscar mientras el usuario escribe.
         input?.addEventListener("input", event => {
 
             clearTimeout(searchTimer);
 
             searchTimer =
+                // Actualiza la lista de resultados del buscador.
                 setTimeout(() => {
 
                     showCityResults(event.target.value);
@@ -237,6 +246,7 @@
 
         });
 
+        // Permite seleccionar el primer resultado usando Enter.
         input?.addEventListener("keydown", async event => {
 
             if(event.key === "Enter"){

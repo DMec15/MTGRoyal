@@ -2,6 +2,7 @@
 @using System.Globalization
 
 @functions {
+    // Convierte el nombre del color al codigo usado por los filtros.
     private static string GetColorCode(string? color)
     {
         var normalized = (color ?? string.Empty).Trim().ToLowerInvariant();
@@ -17,6 +18,7 @@
         };
     }
 
+    // Obtiene la clase CSS correspondiente a la rareza.
     private static string GetRarityClass(string? rarity)
     {
         var normalized = (rarity ?? string.Empty).Trim().ToLowerInvariant();
@@ -327,6 +329,7 @@
 </div>
 
 <script>
+    // Abre el modal usando los datos guardados en la carta.
     function openModalFromCard(card){
 
         openModal(
